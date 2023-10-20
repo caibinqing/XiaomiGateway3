@@ -1520,6 +1520,44 @@ DEVICES += [{
     ],
     "ttl": "3d"  # battery every 1? day
 }, {
+    9878: ["Loock", "Lockin Smart Lock V5 Pro", "loock.lock.fvl202"],
+    "spec": [
+        MapConv("door", "sensor", mi="3.p.1021", map={
+            16: "locked", 20: "locked", 24: "locked", 28: "locked",
+            32: "unlocked", 36: "unlocked", 40: "unlocked", 44: "unlocked",
+            48: "timeout", 52: "timeout", 56: "timeout", 60: "timeout",
+            64: "ajar", 68: "ajar", 72: "ajar", 76: "ajar",
+        }),
+
+        EventConv("action", "sensor", mi="2.e.1020"),
+        Converter("key_id", mi="2.p.4"),
+        Converter("method_id", mi="2.p.2"),
+        MapConv("method", mi="2.p.2", map={
+            1: "mobile", 2: "fingerprint", 3: "password", 4: "nfc", 5: "face",
+            6: "finger_vein", 7: "palm_print", 8: "key", 9: "one_time_password",
+            10: "periodic_password", 11: "homekit", 12: "coerce",
+            13: "two_step_verification", 14: "turntable", 15: "manual", 16: "auto"
+        }),
+        Converter("action_id", mi="2.p.3"),
+        MapConv("action", mi="2.p.3", map={
+            1: "lock", 2: "unlock", 3: "lock_outside", 4: "lock_inside",
+            5: "unlock_inside", 6: "enable_child_lock", 7: "disable_child_lock",
+            8: "enable_away", 9: "disable_away"
+        }),
+        MapConv("position", mi="2.p.1", map={
+            1: "indoor", 2: "outdoor", 3: "not tell indoor or outdoor"
+        }),
+
+        Converter("timestamp", mi="2.p.5"),  # lock timestamp
+
+        # doorbell
+        # EventConv("action", mi="5.e.1006", value="doorbell"),
+        # Converter("timestamp", mi="5.p.1"),  # doorbell timestamp
+
+        Converter("battery", "sensor", mi="4.p.1003"),
+    ],
+    "ttl": "25h"
+}, {
     # https://home.miot-spec.com/spec/oms.lock.dl01
     # https://github.com/AlexxIT/XiaomiGateway3/issues/973
     10249: ["Xiaomi", "Door Lock E10", "XMZNMS01OD"],
