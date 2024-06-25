@@ -23,6 +23,8 @@ class XCover(XEntity, CoverEntity, RestoreEntity):
             self._attr_current_cover_position = data["position"]
             # https://github.com/AlexxIT/XiaomiGateway3/issues/771
             self._attr_is_closed = self._attr_current_cover_position <= 2
+            if not data.get("run_state"):
+                data["run_state"] = "stop"
 
         if "run_state" in data:
             self._attr_state = data["run_state"]
@@ -36,15 +38,25 @@ class XCover(XEntity, CoverEntity, RestoreEntity):
         }
 
     async def async_open_cover(self, **kwargs):
+        if self.current_cover_position != 100:
+            self.device.dispatch({"run_state": STATE_OPENING})
         self.device.write({self.attr: "open"})
 
     async def async_close_cover(self, **kwargs):
+        if self.current_cover_position != 0:
+            self.device.dispatch({"run_state": STATE_CLOSING})
         self.device.write({self.attr: "close"})
 
     async def async_stop_cover(self, **kwargs):
+        self.device.dispatch({"run_state": "stop"})
         self.device.write({self.attr: "stop"})
 
     async def async_set_cover_position(self, position: int, **kwargs):
+        if (current := self.current_cover_position) is not None:
+            if current > position:
+                self.device.dispatch({"run_state": STATE_CLOSING})
+            elif current < position:
+                self.device.dispatch({"run_state": STATE_OPENING})
         self.device.write({"position": position})
 
 
