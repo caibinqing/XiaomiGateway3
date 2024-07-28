@@ -119,9 +119,9 @@ ENTITY_DESCRIPTIONS: dict[str, dict] = {
     # main controls
     "alarm_trigger": {"icon": "mdi:alarm-bell"},
     "fan": {"icon": "mdi:fan"},
-    "outlet": {"icon": "mdi:power-socket-us"},
-    "plug": {"icon": "mdi:power-plug"},
-    "usb": {"icon": "mdi:usb-port"},
+    "outlet": {"icon": "mdi:power-socket-us", "class": SwitchDeviceClass.OUTLET},
+    "plug": {"icon": "mdi:power-plug", "class": SwitchDeviceClass.OUTLET},
+    "usb": {"icon": "mdi:usb-port", "class": SwitchDeviceClass.OUTLET},
     ##
     # batteries and energy sensors
     "sensor.battery": {
