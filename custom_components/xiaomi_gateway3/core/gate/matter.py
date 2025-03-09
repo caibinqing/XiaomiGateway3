@@ -3,7 +3,7 @@ import time
 
 from .base import XGateway
 from ..const import MATTER
-from ..device import XDevice
+from ..device import XDevice, DEVICES
 from ..mini_mqtt import MQTTMessage
 from ..shell.shell_mgw2 import ShellMGW2
 
@@ -17,6 +17,8 @@ class MatterGateway(XGateway):
             did = item["did"]
             device = self.devices.get(did)
             if not device:
+                if not [spec for spec in DEVICES if item["model"] in spec]:
+                    return
                 device = self.init_device(
                     item["model"], did=did, type=MATTER, fw_ver=item["fw_ver"]
                 )
