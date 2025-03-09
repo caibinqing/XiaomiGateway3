@@ -2,6 +2,7 @@ import time
 
 from .base import XGateway
 from ..const import GROUP, MESH
+from ..device import DEVICES
 from ..mini_mqtt import MQTTMessage
 from ..shell.shell_mgw import ShellMGW
 
@@ -23,6 +24,8 @@ class MeshGateway(XGateway):
                 if not device:
                     mac = row[1].lower()  # aa:bb:cc:dd:ee:ff
                     model = row[2]
+                    if not [spec for spec in DEVICES if model in spec]:
+                        continue
                     device = self.init_device(model, did=did, mac=mac, type=MESH)
                 self.add_device(device)
 
@@ -36,6 +39,8 @@ class MeshGateway(XGateway):
                 device = self.devices.get(did)
                 if not device:
                     model = row[2]
+                    if not [spec for spec in DEVICES if model in spec]:
+                        continue
                     device = self.init_device(model, did=did, type=GROUP)
                 # update childs of device
                 device.extra["childs"] = childs.get(row[1])

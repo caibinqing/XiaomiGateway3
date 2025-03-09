@@ -1,7 +1,7 @@
 import time
 
 from .base import XGateway
-from ..device import BLE
+from ..device import BLE, DEVICES
 from ..mini_mqtt import MQTTMessage
 from ..shell.shell_mgw import ShellMGW
 
@@ -17,6 +17,8 @@ class BLEGateway(XGateway):
             if not device:
                 mac = reverse_mac(row[1])  # aa:bb:cc:dd:ee:ff
                 model = row[2]
+                if not [spec for spec in DEVICES if model in spec]:
+                    continue
                 device = self.init_device(model, did=did, type=BLE, mac=mac)
             self.add_device(device)
 
@@ -45,6 +47,8 @@ class BLEGateway(XGateway):
                 return
             # create device "on the fly"
             model = data["dev"]["pdid"]
+            if not [spec for spec in DEVICES if model in spec]:
+                return
             mac = data["dev"]["mac"].lower()
             device = self.init_device(model, type=BLE, mac=mac, did=did)
             device.available = True

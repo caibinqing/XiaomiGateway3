@@ -3,7 +3,7 @@ import time
 
 from .base import XGateway
 from ..const import ZIGBEE
-from ..device import XDevice, XDeviceExtra, hex_to_ieee
+from ..device import XDevice, XDeviceExtra, hex_to_ieee, DEVICES
 from ..mini_mqtt import MQTTMessage
 from ..shell.shell_mgw import ShellMGW
 from ..shell.shell_mgw2 import ShellMGW2
@@ -30,6 +30,8 @@ class LumiGateway(XGateway):
                 }
                 if did in xiaomi_did:
                     extra["cloud_did"] = xiaomi_did[did]
+                if not [spec for spec in DEVICES if item["model"] in spec]:
+                    continue
                 device = self.init_device(item["model"], **extra)
 
             self.add_device(device)
