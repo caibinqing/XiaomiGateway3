@@ -98,10 +98,10 @@ class SilabsGateway(XGateway):
                 did = "lumi." + uid.lstrip("0x")
                 device: XDevice = self.devices.get(did)
                 if not device:
-                    if uid not in self.unknown:
-                        self.debug("silabs_add_unknown", uid=uid)
-                        self.unknown[uid] = {"did": did, "nwk": nwk}
-                        asyncio.create_task(self.silabs_process_unknown(uid))
+                    # if uid not in self.unknown:
+                    #     self.debug("silabs_add_unknown", uid=uid)
+                    #     self.unknown[uid] = {"did": did, "nwk": nwk}
+                    #     asyncio.create_task(self.silabs_process_unknown(uid))
                     return
 
             device.extra["lqi"] = data["linkQuality"]
